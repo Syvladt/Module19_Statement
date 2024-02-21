@@ -71,28 +71,32 @@ int main()
 	float sSum = 0.0, maxSalary = 0.0, nSalary = 0.0;
 	int counter = 1;
 	src.open("statement.txt");
-	while (!src.eof())
+	if (src.is_open())
 	{
-		src >> fName >> sName >> salary >> pDate;
-		if (checkNumber(salary))
+		while (!src.eof())
 		{
-			nSalary = std::stof(salary);
-			if (maxSalary < nSalary)
+			src >> fName >> sName >> salary >> pDate;
+			if (checkNumber(salary))
 			{
-				maxFName = fName;
-				maxSName = sName;
-				maxSalary = nSalary;
+				nSalary = std::stof(salary);
+				if (maxSalary < nSalary)
+				{
+					maxFName = fName;
+					maxSName = sName;
+					maxSalary = nSalary;
+				}
+				sSum += nSalary;
 			}
-			sSum += nSalary;
+			else
+				std::cout << "Payout in " << counter << " row is not correct.\n";
+			if (!checkDate(pDate))
+				std::cout << "Data payout in " << counter << " row is not correct.\n";
+			counter++;
 		}
-		else
-			std::cout << "Payout in " << counter << " row is not correct\n";
-		if (!checkDate(pDate))
-			std::cout << "Data payout in " << counter << " row is not correct\n";
-		counter++;
+		src.close();
+		std::cout << std::fixed << std::setprecision(2);
+		std::cout << "Maximum payout for " << maxFName << ' ' << maxSName << ' ' << maxSalary << "\nSum all payouts: " << sSum << '\n';
 	}
-	src.close();
-	std::cout << std::fixed << std::setprecision(2);
-	std::cout << "Maximum payout for " << maxFName << ' ' << maxSName << ' ' << maxSalary << "\nSum all payouts: " << sSum << '\n';
-	//printf("%f\n", maxSalary, sSum);
+	else
+		std::cout << "File statement.txt not exist.\n";
 }
